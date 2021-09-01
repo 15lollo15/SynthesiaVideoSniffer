@@ -24,7 +24,7 @@ public class MainClass {
     public static final int FRAME_TO_SKIP = 30;
     public static final String TEST_VIDEO_URI = "song4.mp4";
     public static final String TEST_MIDI_URI = "midi_f.midi";
-    public static final String MASK_88_URI = "mask88.png";
+    public static final String MASK_88_URI = "src/main/resources/mask88.png";
     public static final int RESOLUTION = 16;
     public static final boolean IS_TEST = false;
 
