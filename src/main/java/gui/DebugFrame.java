@@ -5,6 +5,8 @@ import sniffer.Keyboard;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 public class DebugFrame extends JFrame {
@@ -13,6 +15,8 @@ public class DebugFrame extends JFrame {
     private JPanel mainPanel;
     private JLabel frameView;
     private KeyboardView keyboardView;
+    private JButton nextFrameButton;
+    private JButton prevFrameButton;
 
     public DebugFrame(BufferedImage frame){
         this(frame, Note.A0, Keyboard.DEFAULT_KEYBOARD_SIZE);
@@ -29,14 +33,21 @@ public class DebugFrame extends JFrame {
         mainPanel.add(frameView, BorderLayout.CENTER);
         mainPanel.add(keyboardView, BorderLayout.SOUTH);
 
+        nextFrameButton = new JButton("Next frame");
+        prevFrameButton = new JButton("Prev frame");
+        mainPanel.add(prevFrameButton, BorderLayout.WEST);
+        mainPanel.add(nextFrameButton, BorderLayout.EAST);
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.pack();
         this.setVisible(true);
     }
 
+
     public void setFrame(BufferedImage frame){
         frameView.setIcon(new ImageIcon(frame));
+        frameView.repaint();
         this.repaint();
     }
 
@@ -44,4 +55,11 @@ public class DebugFrame extends JFrame {
         keyboardView.setStatus(index, status);
     }
 
+    public JButton getNextFrameButton() {
+        return nextFrameButton;
+    }
+
+    public JButton getPrevFrameButton() {
+        return prevFrameButton;
+    }
 }

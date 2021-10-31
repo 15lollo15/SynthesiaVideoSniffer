@@ -5,8 +5,12 @@ import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VideoFrameGrabber {
 
@@ -21,6 +25,16 @@ public class VideoFrameGrabber {
         } catch (FFmpegFrameGrabber.Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<BufferedImage> getAllNextFrames() {
+        List<BufferedImage> frames = new ArrayList<>();
+        BufferedImage frame = nextFrame();
+        while (frame != null) {
+            frames.add(frame);
+            frame = nextFrame();
+        }
+        return frames;
     }
 
     public int getFrameNumber() {
