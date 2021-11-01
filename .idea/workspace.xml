@@ -4,15 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e6a41966-0777-45a4-b697-e58cdfa60148" name="Changes" comment="New gitignore">
-      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/DebugController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/MaskInputController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/MaskInputFrame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/PanelWithBackground.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/Timer.java" afterDir="false" />
+    <list default="true" id="e6a41966-0777-45a4-b697-e58cdfa60148" name="Changes" comment="New Debug Frame and Timer Utils Classes">
+      <change afterPath="$PROJECT_DIR$/src/main/java/colorspace/coordinates/ReferenceWhite.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/colorspace/coordinates/data_types/CIELab.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/colorspace/coordinates/data_types/CIEXYZ.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/colorspace/coordinates/data_types/CIExyY.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/colorspace/coordinates/data_types/ChromaticityCoord.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/colorspace/coordinates/primaries/BT709.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/colorspace/sRGB.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mask/Mask.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MainClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MainClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/DebugController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/DebugFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/DebugFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/KeyboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/KeyboardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/MaskInputController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/MaskInputFrame.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/PanelWithBackground.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/image/ImageUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/image/ImageUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mask/MaskReader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/midi/Note.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/midi/Note.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sniffer/KeySensor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sniffer/KeySensor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sniffer/Keyboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sniffer/Keyboard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Timer.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/video/VideoFrameGrabber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/video/VideoFrameGrabber.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
