@@ -62,12 +62,16 @@ public class VideoFrameGrabber {
     public void end() {
         try {
             grabber.stop();
-            grabber.releaseUnsafe();
-            Thread.currentThread().interrupt();
 
             grabber = null;
         } catch (FrameGrabber.Exception e) {
             e.printStackTrace();
         }
     }
+
+    public void skipMillis(long millis) {
+        int framesToSkip = (int) ((grabber.getFrameRate() * millis) / 1000.0);
+        skipFrames(framesToSkip);
+    }
+
 }

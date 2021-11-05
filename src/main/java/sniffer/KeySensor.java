@@ -1,6 +1,7 @@
 package sniffer;
 
 import image.ImageUtils;
+import midi.Note;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -25,12 +26,18 @@ public class KeySensor {
      */
     private static final int DELTA_E_SENSITIVITY = 5;
 
+    private final Note note;
     private final Rectangle sensorArea;
     private final Color baseColor;
 
-    public KeySensor(Rectangle sensorArea, Color baseColor) {
+    public KeySensor(Note note, Rectangle sensorArea, Color baseColor) {
+        this.note = note;
         this.sensorArea = sensorArea;
         this.baseColor = baseColor;
+    }
+
+    public Note getNote() {
+        return note;
     }
 
     public boolean isPressed(BufferedImage img) {
