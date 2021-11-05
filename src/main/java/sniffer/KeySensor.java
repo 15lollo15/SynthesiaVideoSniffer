@@ -23,4 +23,12 @@ public class KeySensor {
         Color areaColor = ImageUtils.average(img, sensorArea);
         return ImageUtils.colorDifference(baseColor, areaColor) > sensibility;
     }
+
+    public void drawSensor(BufferedImage img) {
+        Graphics2D g2d = img.createGraphics();
+        g2d.setColor(Color.RED);
+        g2d.fillRect(sensorArea.x, sensorArea.y, sensorArea.width, sensorArea.height);
+        g2d.dispose();
+    }
+
 }

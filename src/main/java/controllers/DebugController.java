@@ -1,18 +1,12 @@
 package controllers;
 
 import gui.DebugFrame;
-import image.ImageUtils;
-import mask.MaskReader;
 import sniffer.KeySensor;
-import video.VideoFrameGrabber;
 
-import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.security.Key;
 import java.util.List;
 
 public class DebugController {

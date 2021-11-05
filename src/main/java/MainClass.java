@@ -1,37 +1,26 @@
-import controllers.DebugController;
 import gui.DebugFrame;
-import gui.MaskInputController;
-import gui.MaskInputFrame;
 import image.ImageUtils;
-import javafx.scene.input.KeyCode;
-import mask.MaskReader;
-import midi.Note;
-import org.opencv.video.Video;
+import mask.Mask;
 import sniffer.KeySensor;
 import sniffer.Keyboard;
 import utils.Timer;
 import video.VideoFrameGrabber;
 
-import javax.imageio.ImageIO;
 import javax.sound.midi.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainClass {
 
     public static final int FRAME_TO_SKIP = 0;
-    public static final String TEST_VIDEO_URI = "song2.mp4";
-    public static final String TEST_MIDI_URI = "midi_f.midi";
-    public static final String MASK_88_URI = "src/main/resources/mask88.png";
+    public static final String TEST_VIDEO_URI = "C:\\Users\\Utente\\Desktop\\test\\fr.mp4";
+    public static final String TEST_MIDI_URI = "C:\\Users\\Utente\\Desktop\\test\\midi_f.midi";
     public static final int RESOLUTION = 16;
     public static final boolean IS_TEST = false;
+
+    public static final boolean SHOW_KEY_SENSORS = true;
 
 
     public static void main(String[] args) throws IOException, MidiUnavailableException, InvalidMidiDataException, InterruptedException {
@@ -79,6 +68,11 @@ public class MainClass {
 
             for(int i = 0; i<keySensors.length; i++) {
                 boolean isPressed = keySensors[i].isPressed(frame);
+
+                if (SHOW_KEY_SENSORS) {
+                    keySensors[i].drawSensor(frame);
+                }
+
                 MidiEvent me;
                 if(isPressed) {
                     me = keyboard.pressKey(i, frameN);
@@ -107,7 +101,8 @@ public class MainClass {
 
 
     public static KeySensor[] loadSensors(BufferedImage baseFrame){
-        Rectangle[] rects = MaskReader.readMask(ImageUtils.readImage(new File(MASK_88_URI)));
+        Mask mask = new Mask(baseFrame.getWidth(), baseFrame.getHeight());
+        Rectangle[] rects = mask.getRectangles();
         KeySensor[] keySensors = new KeySensor[rects.length];
         for(int i = 0; i<rects.length; i++){
             Color c = ImageUtils.average(baseFrame, rects[i]);
