@@ -41,6 +41,7 @@ public class Mask {
 
     /**
      * Set Y offset for white keys sensors
+     *
      * @param newYOffset Y offset for white keys
      * @return true is the new offset is valid, false otherwise
      */
@@ -59,6 +60,7 @@ public class Mask {
 
     /**
      * Set Y offset for black keys sensors
+     *
      * @param newYOffset Y offset for black keys
      * @return true is the new offset is valid, false otherwise
      */
@@ -127,7 +129,7 @@ public class Mask {
                 }
 
                 // if B#b or E#b
-                if (i % 12 == 1|| i % 12 == 6) {
+                if (i % 12 == 1 || i % 12 == 6) {
                     xOffset += whiteKeyOffset / 10.0;
                 }
 

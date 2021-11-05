@@ -1,9 +1,7 @@
 package sniffer;
 
 import image.ImageUtils;
-import midi.Note;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -19,7 +17,7 @@ public class KeySensor {
         this.baseColor = baseColor;
     }
 
-    public boolean isPressed(BufferedImage img){
+    public boolean isPressed(BufferedImage img) {
         Color areaColor = ImageUtils.average(img, sensorArea);
         return ImageUtils.colorDifference(baseColor, areaColor) > sensibility;
     }

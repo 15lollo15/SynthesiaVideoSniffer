@@ -24,12 +24,6 @@ public class MainClass {
 
 
     public static void main(String[] args) throws IOException, MidiUnavailableException, InvalidMidiDataException, InterruptedException {
-//        MaskInputController controller = new MaskInputController();
-//        controller.start();
-//        controller.addSensor();
-//        controller.addSensor();
-//        controller.addSensor();
-
         //Util Timer
         Timer timer = new Timer();
 
@@ -56,17 +50,10 @@ public class MainClass {
 
 
         int frameN = 1;
-//        timer.start();
-//        System.out.println("Frames number: " + videoFrameGrabber.getFrameNumber());
-//        System.out.println("Frames extraction...");
-//        List<BufferedImage> frames = videoFrameGrabber.getAllNextFrames();
-//        System.out.println("Frames extracted!!");
-//        System.out.println(timer.stop() + " millis elapsed");
-//        System.out.println("Extracted Frames: " + frames.size());
-        BufferedImage frame = null;
-        while(null != (frame = videoFrameGrabber.nextFrame())) {
+        BufferedImage frame;
+        while (null != (frame = videoFrameGrabber.nextFrame())) {
 
-            for(int i = 0; i<keySensors.length; i++) {
+            for (int i = 0; i < keySensors.length; i++) {
                 boolean isPressed = keySensors[i].isPressed(frame);
 
                 if (SHOW_KEY_SENSORS) {
@@ -74,19 +61,17 @@ public class MainClass {
                 }
 
                 MidiEvent me;
-                if(isPressed) {
+                if (isPressed) {
                     me = keyboard.pressKey(i, frameN);
-                }else{
+                } else {
                     me = keyboard.releaseKey(i, frameN);
                 }
                 debugFrame.setKeyboardStatus(i, isPressed);
                 debugFrame.setFrame(frame);
                 track.add(me);
-//                if (me != null)
-//                    System.out.println(i + " pressed/released");
             }
             frameN++;
-            if(IS_TEST)
+            if (IS_TEST)
                 Thread.sleep(100);
         }
 
@@ -99,12 +84,11 @@ public class MainClass {
     }
 
 
-
-    public static KeySensor[] loadSensors(BufferedImage baseFrame){
+    public static KeySensor[] loadSensors(BufferedImage baseFrame) {
         Mask mask = new Mask(baseFrame.getWidth(), baseFrame.getHeight());
         Rectangle[] rects = mask.getRectangles();
         KeySensor[] keySensors = new KeySensor[rects.length];
-        for(int i = 0; i<rects.length; i++){
+        for (int i = 0; i < rects.length; i++) {
             Color c = ImageUtils.average(baseFrame, rects[i]);
             keySensors[i] = new KeySensor(rects[i], c);
         }

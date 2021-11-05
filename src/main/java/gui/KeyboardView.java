@@ -21,7 +21,7 @@ public class KeyboardView extends JPanel {
         this.status = new boolean[numKeys];
     }
 
-    public void setStatus(int index, boolean status){
+    public void setStatus(int index, boolean status) {
         this.status[index] = status;
     }
 
@@ -33,18 +33,18 @@ public class KeyboardView extends JPanel {
         int keyH = this.getHeight() / 2;
 
 
-        for(int i = startNote.ordinal(); i < (startNote.ordinal() + numKeys); i++) {
+        for (int i = startNote.ordinal(); i < (startNote.ordinal() + numKeys); i++) {
             String noteName = Note.values()[i].toString();
             g.setColor(NOT_PRESSED_COLOR);
-            if(status[i - startNote.ordinal()])
+            if (status[i - startNote.ordinal()])
                 g.setColor(PRESSED_COLOR);
             int y = 0;
-            if(noteName.charAt(noteName.length()-1) != 'b') {
+            if (noteName.charAt(noteName.length() - 1) != 'b') {
                 y = keyH;
             }
-            g.fillRect(i*keyW, y, keyW, keyH);
+            g.fillRect(i * keyW, y, keyW, keyH);
             g.setColor(Color.BLACK);
-            g.drawRect(i*keyW, y, keyW, keyH);
+            g.drawRect(i * keyW, y, keyW, keyH);
         }
 
     }

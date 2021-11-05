@@ -5,8 +5,6 @@ import sniffer.Keyboard;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 public class DebugFrame extends JFrame {
@@ -18,7 +16,7 @@ public class DebugFrame extends JFrame {
     private JButton nextFrameButton;
     private JButton prevFrameButton;
 
-    public DebugFrame(BufferedImage frame){
+    public DebugFrame(BufferedImage frame) {
         this(frame, Note.A0, Keyboard.DEFAULT_KEYBOARD_SIZE);
     }
 
@@ -45,13 +43,13 @@ public class DebugFrame extends JFrame {
     }
 
 
-    public void setFrame(BufferedImage frame){
+    public void setFrame(BufferedImage frame) {
         frameView.setIcon(new ImageIcon(frame));
         frameView.repaint();
         this.repaint();
     }
 
-    public void setKeyboardStatus(int index, boolean status){
+    public void setKeyboardStatus(int index, boolean status) {
         keyboardView.setStatus(index, status);
     }
 

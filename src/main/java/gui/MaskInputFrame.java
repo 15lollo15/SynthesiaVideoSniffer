@@ -1,12 +1,10 @@
 package gui;
 
-import org.w3c.dom.css.Rect;
 import sniffer.Keyboard;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class MaskInputFrame extends JFrame {
     public static final Color DEFAULT_UNSELECTED_BUTTON = Color.RED;
@@ -33,7 +31,7 @@ public class MaskInputFrame extends JFrame {
         mainPanel.add(sensorsPanel, BorderLayout.CENTER);
 
 
-        for(int i = 0; i < defaultRects.length; i++) {
+        for (int i = 0; i < defaultRects.length; i++) {
             JButton tmpButton = newSensor(defaultRects[i].x, defaultRects[i].y);
             sensorsPanel.add(tmpButton);
         }
@@ -49,8 +47,8 @@ public class MaskInputFrame extends JFrame {
     }
 
     public JButton addSensor() {
-        if(sensorsPanel.getComponentCount() < Keyboard.DEFAULT_KEYBOARD_SIZE){
-            JButton sensor = newSensor((int)(Math.random()*sensorsPanel.getWidth()), (int)(Math.random()*sensorsPanel.getHeight()));
+        if (sensorsPanel.getComponentCount() < Keyboard.DEFAULT_KEYBOARD_SIZE) {
+            JButton sensor = newSensor((int) (Math.random() * sensorsPanel.getWidth()), (int) (Math.random() * sensorsPanel.getHeight()));
             sensor.setSelected(true);
             sensorsPanel.add(sensor);
             return sensor;

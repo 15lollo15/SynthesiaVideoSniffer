@@ -18,30 +18,30 @@ public class Keyboard {
         this(DEFAULT_KEYBOARD_SIZE, Note.A0);
     }
 
-    public Keyboard (int keyboardSize, Note startNote) {
+    public Keyboard(int keyboardSize, Note startNote) {
         this.keyboardSize = keyboardSize;
         this.startNote = startNote;
         this.isPressed = new boolean[keyboardSize];
     }
 
-    public MidiEvent pressKey(int keyIndex, int tick){
+    public MidiEvent pressKey(int keyIndex, int tick) {
         return pressKey(keyIndex, tick, DEFAULT_VELOCITY);
     }
 
-    public MidiEvent releaseKey(int keyIndex, int tick){
+    public MidiEvent releaseKey(int keyIndex, int tick) {
         return releaseKey(keyIndex, tick, DEFAULT_VELOCITY);
     }
 
-    public MidiEvent pressKey(int keyIndex, int tick, int velocity){
-        if(!isPressed[keyIndex]) {
+    public MidiEvent pressKey(int keyIndex, int tick, int velocity) {
+        if (!isPressed[keyIndex]) {
             isPressed[keyIndex] = true;
             return sendEvent(ShortMessage.NOTE_ON, keyIndex, tick, velocity);
         }
         return null;
     }
 
-    public MidiEvent releaseKey(int keyIndex, int tick, int velocity){
-        if(isPressed[keyIndex]) {
+    public MidiEvent releaseKey(int keyIndex, int tick, int velocity) {
+        if (isPressed[keyIndex]) {
             isPressed[keyIndex] = false;
             return sendEvent(ShortMessage.NOTE_OFF, keyIndex, tick, velocity);
         }
@@ -57,7 +57,9 @@ public class Keyboard {
         ShortMessage message = null;
         try {
             message = new ShortMessage(messageCode, 1, realMidiCode, velocity);
-        } catch (InvalidMidiDataException e) { e.printStackTrace();}
+        } catch (InvalidMidiDataException e) {
+            e.printStackTrace();
+        }
 
         return new MidiEvent(message, tick);
     }

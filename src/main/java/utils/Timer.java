@@ -7,14 +7,14 @@ public class Timer {
     private boolean isRunning = false;
 
     public void start() {
-        if(!isRunning) {
+        if (!isRunning) {
             start = System.currentTimeMillis();
             isRunning = true;
         }
     }
 
     public long stop() {
-        if(isRunning) {
+        if (isRunning) {
             end = System.currentTimeMillis();
             isRunning = false;
             return end - start;
