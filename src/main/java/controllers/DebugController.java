@@ -1,18 +1,12 @@
 package controllers;
 
 import gui.DebugFrame;
-import image.ImageUtils;
-import mask.MaskReader;
 import sniffer.KeySensor;
-import video.VideoFrameGrabber;
 
-import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.security.Key;
 import java.util.List;
 
 public class DebugController {
@@ -34,7 +28,7 @@ public class DebugController {
     public void setFrameAtIndex(int index) {
         BufferedImage tmpFrame = frames.get(index);
         debugFrame.setFrame(tmpFrame);
-        for(int i = 0; i<keySensors.length; i++){
+        for (int i = 0; i < keySensors.length; i++) {
             boolean isPressed = keySensors[i].isPressed(tmpFrame);
             debugFrame.setKeyboardStatus(i, isPressed);
         }
@@ -45,7 +39,7 @@ public class DebugController {
         debugFrame.getNextFrameButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(index >= frames.size()) return;
+                if (index >= frames.size()) return;
                 setFrameAtIndex(++index);
                 System.out.println(index);
             }
@@ -54,7 +48,7 @@ public class DebugController {
         debugFrame.getPrevFrameButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(index <= 0) return;
+                if (index <= 0) return;
                 setFrameAtIndex(--index);
                 System.out.println(index);
             }

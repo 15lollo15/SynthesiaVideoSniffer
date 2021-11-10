@@ -1,117 +1,114 @@
-import controllers.DebugController;
 import gui.DebugFrame;
-import gui.MaskInputController;
-import gui.MaskInputFrame;
 import image.ImageUtils;
-import javafx.scene.input.KeyCode;
-import mask.MaskReader;
+import mask.Mask;
 import midi.Note;
-import org.opencv.video.Video;
 import sniffer.KeySensor;
 import sniffer.Keyboard;
-import utils.Timer;
 import video.VideoFrameGrabber;
 
-import javax.imageio.ImageIO;
 import javax.sound.midi.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainClass {
 
-    public static final int FRAME_TO_SKIP = 0;
-    public static final String TEST_VIDEO_URI = "song2.mp4";
-    public static final String TEST_MIDI_URI = "midi_f.midi";
-    public static final String MASK_88_URI = "src/main/resources/mask88.png";
-    public static final int RESOLUTION = 16;
-    public static final boolean IS_TEST = false;
+    private static final File SYNTHESIA_VIDEO = new File(
+            "C:\\Users\\Utente\\Desktop\\test\\gny.mp4"
+    );
+
+    private static final File MIDI_OUTPUT = new File(
+            "C:\\Users\\Utente\\Desktop\\test\\midi_f.midi"
+    );
+
+    private static final long MILLIS_TO_SKIP = 0;
+
+    // DEBUG CONSTANTS
+
+    private static final boolean UNLIMITED_SPEED = true;
+    private static final double SPEED = 1.0;
+
+    private static final boolean SHOW_KEY_SENSORS = true;
 
 
-    public static void main(String[] args) throws IOException, MidiUnavailableException, InvalidMidiDataException, InterruptedException {
-//        MaskInputController controller = new MaskInputController();
-//        controller.start();
-//        controller.addSensor();
-//        controller.addSensor();
-//        controller.addSensor();
+    public static void main(String[] args) throws IOException, MidiUnavailableException, InvalidMidiDataException {
 
-        //Util Timer
-        Timer timer = new Timer();
+        // Grabber start
+        VideoFrameGrabber videoFrameGrabber = new VideoFrameGrabber(SYNTHESIA_VIDEO);
+        videoFrameGrabber.skipMillis(MILLIS_TO_SKIP);
 
-        //Grabber start
-        VideoFrameGrabber videoFrameGrabber = new VideoFrameGrabber(new File(TEST_VIDEO_URI));
-        videoFrameGrabber.skipFrames(FRAME_TO_SKIP);
-//
-        //Read base frame
+        // Read base frame
         BufferedImage baseFrame = videoFrameGrabber.nextFrame();
-//
-        //Mask upload
-        KeySensor[] keySensors = loadSensors(baseFrame);
 
-        //Setup Keyboard
+        // Mask upload
+        List<KeySensor> keySensors = loadSensors(baseFrame);
+
+        // Setup Keyboard
         Keyboard keyboard = new Keyboard();
 
-        //Setup MIDI
+        // Setup MIDI
         Sequencer sequencer = MidiSystem.getSequencer();
         sequencer.open();
-        Sequence sequence = new Sequence(Sequence.PPQ, RESOLUTION);
+        Sequence sequence = new Sequence(Sequence.PPQ, 16);
         Track track = sequence.createTrack();
 
         DebugFrame debugFrame = new DebugFrame(baseFrame);
 
+        int numFrame = 1;
+        BufferedImage frame;
+        while (null != (frame = videoFrameGrabber.nextFrame())) {
+            for (KeySensor keySensor : keySensors) {
+                int keyIndex = keySensor.getNote().ordinal();
+                boolean isPressed = keySensor.isPressed(frame);
 
-        int frameN = 1;
-//        timer.start();
-//        System.out.println("Frames number: " + videoFrameGrabber.getFrameNumber());
-//        System.out.println("Frames extraction...");
-//        List<BufferedImage> frames = videoFrameGrabber.getAllNextFrames();
-//        System.out.println("Frames extracted!!");
-//        System.out.println(timer.stop() + " millis elapsed");
-//        System.out.println("Extracted Frames: " + frames.size());
-        BufferedImage frame = null;
-        while(null != (frame = videoFrameGrabber.nextFrame())) {
-
-            for(int i = 0; i<keySensors.length; i++) {
-                boolean isPressed = keySensors[i].isPressed(frame);
                 MidiEvent me;
-                if(isPressed) {
-                    me = keyboard.pressKey(i, frameN);
-                }else{
-                    me = keyboard.releaseKey(i, frameN);
+                if (isPressed) {
+                    me = keyboard.pressKey(keyIndex, numFrame);
+                } else {
+                    me = keyboard.releaseKey(keyIndex, numFrame);
                 }
-                debugFrame.setKeyboardStatus(i, isPressed);
-                debugFrame.setFrame(frame);
+
                 track.add(me);
-//                if (me != null)
-//                    System.out.println(i + " pressed/released");
+
+                if (SHOW_KEY_SENSORS) {
+                    keySensor.drawSensor(frame);
+                }
+                debugFrame.setKeyboardStatus(keyIndex, isPressed);
+                debugFrame.setFrame(frame);
             }
-            frameN++;
-            if(IS_TEST)
-                Thread.sleep(100);
+            numFrame++;
+
+            if (!UNLIMITED_SPEED) {
+                sleep(videoFrameGrabber.getFrameRate(), SPEED);
+            }
         }
-
-
-        System.out.println("END");
-        MidiSystem.write(sequence, MidiSystem.getMidiFileTypes()[0], new File(TEST_MIDI_URI));
+        MidiSystem.write(sequence, MidiSystem.getMidiFileTypes()[0], MIDI_OUTPUT);
         videoFrameGrabber.end();
-        System.exit(0);
 
+        System.exit(0);
     }
 
+    public static void sleep(double frameRate, double speed) {
+        long ms = (long) (1000.0 / (frameRate * speed));
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static List<KeySensor> loadSensors(BufferedImage baseFrame) {
+        Mask mask = new Mask(baseFrame.getWidth(), baseFrame.getHeight());
+        Rectangle[] rects = mask.getRectangles();
 
-    public static KeySensor[] loadSensors(BufferedImage baseFrame){
-        Rectangle[] rects = MaskReader.readMask(ImageUtils.readImage(new File(MASK_88_URI)));
-        KeySensor[] keySensors = new KeySensor[rects.length];
-        for(int i = 0; i<rects.length; i++){
-            Color c = ImageUtils.average(baseFrame, rects[i]);
-            keySensors[i] = new KeySensor(rects[i], c);
+        List<KeySensor> keySensors = new ArrayList<>(rects.length);
+        for (int i = 0; i < rects.length; i++) {
+            Color color = ImageUtils.average(baseFrame, rects[i]);
+            Note note = Note.values()[i];
+            keySensors.add(new KeySensor(note, rects[i], color));
         }
         return keySensors;
     }
