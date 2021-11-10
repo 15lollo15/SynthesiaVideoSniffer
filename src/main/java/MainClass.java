@@ -38,6 +38,7 @@ public class MainClass {
 
         // Grabber start
         VideoFrameGrabber videoFrameGrabber = new VideoFrameGrabber(SYNTHESIA_VIDEO);
+        videoFrameGrabber.start();
         videoFrameGrabber.skipMillis(MILLIS_TO_SKIP);
 
         // Read base frame
@@ -86,7 +87,7 @@ public class MainClass {
             }
         }
         MidiSystem.write(sequence, MidiSystem.getMidiFileTypes()[0], MIDI_OUTPUT);
-        videoFrameGrabber.end();
+        videoFrameGrabber.close();
 
         System.exit(0);
     }
