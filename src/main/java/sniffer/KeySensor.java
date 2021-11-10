@@ -1,5 +1,7 @@
 package sniffer;
 
+import colorspace.coordinates.data_types.CIELab;
+import colorspace.sRGB;
 import image.ImageUtils;
 import midi.Note;
 
@@ -28,12 +30,12 @@ public class KeySensor {
 
     private final Note note;
     private final Rectangle sensorArea;
-    private final Color baseColor;
+    private final CIELab baseColorLab;
 
     public KeySensor(Note note, Rectangle sensorArea, Color baseColor) {
         this.note = note;
         this.sensorArea = sensorArea;
-        this.baseColor = baseColor;
+        this.baseColorLab = sRGB.toCIELab(baseColor);
     }
 
     public Note getNote() {
@@ -42,7 +44,8 @@ public class KeySensor {
 
     public boolean isPressed(BufferedImage img) {
         Color areaColor = ImageUtils.average(img, sensorArea);
-        return ImageUtils.colorDifference(baseColor, areaColor) > DELTA_E_SENSITIVITY;
+        CIELab areaColorLab = sRGB.toCIELab(areaColor);
+        return ImageUtils.colorDifference(baseColorLab, areaColorLab) > DELTA_E_SENSITIVITY;
     }
 
     public void drawSensor(BufferedImage img) {

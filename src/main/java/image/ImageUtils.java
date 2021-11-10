@@ -1,5 +1,6 @@
 package image;
 
+import colorspace.coordinates.data_types.CIELab;
 import colorspace.sRGB;
 
 import java.awt.*;
@@ -37,6 +38,12 @@ public class ImageUtils {
     }
 
     public static double colorDifference(Color c1, Color c2) {
+        CIELab lab1 = sRGB.toCIELab(c1);
+        CIELab lab2 = sRGB.toCIELab(c2);
+        return sRGB.deltaE94(lab1, lab2);
+    }
+
+    public static double colorDifference(CIELab c1, CIELab c2) {
         return sRGB.deltaE94(c1, c2);
     }
 
