@@ -36,8 +36,8 @@ public class KeyboardView extends JPanel {
         WHITE_KEY_WIDTH = 3 * scaleFactor;
         WHITE_KEY_HEIGHT = WHITE_KEY_WIDTH * 6;
 
-        this.panelWidth = frameWidth;
-        this.panelHeight = WHITE_KEY_HEIGHT + 10;
+        this.panelWidth = WHITE_KEY_WIDTH * Note.countWhiteKeys(startNote, endNote);
+        this.panelHeight = WHITE_KEY_HEIGHT;
 
         setPreferredSize(new Dimension(panelWidth, panelHeight));
     }
@@ -50,8 +50,7 @@ public class KeyboardView extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-        // draw background
-        g.setColor(new Color(150, 28, 20));
+        g.setColor(Color.WHITE);
         g.fillRect(0, 0, panelWidth, panelHeight);
 
         // offset to center the piano
@@ -62,8 +61,6 @@ public class KeyboardView extends JPanel {
         for (int i = startNote.ordinal(); i <= endNote.ordinal(); i++) {
             if (Note.isWhiteKey(i)) {
                 // draw key
-                g.setColor(Color.WHITE);
-                g.fillRect(X_OFF + xOffset, 0, WHITE_KEY_WIDTH, WHITE_KEY_HEIGHT);
                 g.setColor(Color.BLACK);
                 g.drawRect(X_OFF + xOffset, 0, WHITE_KEY_WIDTH, WHITE_KEY_HEIGHT);
 
@@ -94,7 +91,6 @@ public class KeyboardView extends JPanel {
                 xOffset += WHITE_KEY_WIDTH;
             }
         }
-
     }
 
     private boolean isKeyPressed(int keyIndex) {
