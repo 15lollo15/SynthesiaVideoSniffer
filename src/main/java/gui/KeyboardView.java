@@ -47,8 +47,8 @@ public class KeyboardView extends JPanel {
     }
 
     @Override
-    public void paint(Graphics g) {
-        super.paint(g);
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, panelWidth, panelHeight);
