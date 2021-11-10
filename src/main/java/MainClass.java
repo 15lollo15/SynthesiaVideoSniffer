@@ -77,9 +77,10 @@ public class MainClass {
                 if (SHOW_KEY_SENSORS) {
                     keySensor.drawSensor(frame);
                 }
+
                 debugFrame.setKeyboardStatus(keyIndex, isPressed);
-                debugFrame.setFrame(frame);
             }
+            debugFrame.setFrame(frame);
             numFrame++;
 
             if (!UNLIMITED_SPEED) {
