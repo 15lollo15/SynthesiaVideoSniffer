@@ -25,12 +25,9 @@ public class sRGB {
      * This is the less accurate Delta E of the four available
      * (Delta E 1976, 1994, 2000, CMC) but is also the faster
      */
-    public static double deltaE76(Color c1, Color c2) {
-        CIELab lab1 = toCIELab(c1);
-        CIELab lab2 = toCIELab(c2);
-
-        return Math.sqrt(Math.pow(lab1.L - lab2.L, 2) +
-                Math.pow(lab1.a - lab2.a, 2) + Math.pow(lab1.b - lab2.b, 2));
+    public static double deltaE76(CIELab lab1, CIELab lab2) {
+        return Math.sqrt(square(lab1.L - lab2.L) +
+                square(lab1.a - lab2.a) + square(lab1.b - lab2.b));
     }
 
     /**
@@ -39,22 +36,19 @@ public class sRGB {
      *
      * This more accurate than Delta E 1976.
      */
-    public static double deltaE94(Color c1, Color c2) {
-        CIELab lab1 = toCIELab(c1);
-        CIELab lab2 = toCIELab(c2);
-
+    public static double deltaE94(CIELab lab1, CIELab lab2) {
         double K1 = 0.045;
         double K2 = 0.015;
 
         double deltaA = lab1.a - lab2.a;
         double deltaB = lab1.b - lab2.b;
 
-        double C1 = Math.sqrt(Math.pow(lab1.a, 2) + Math.pow(lab1.b, 2));
-        double C2 = Math.sqrt(Math.pow(lab2.a, 2) + Math.pow(lab2.b, 2));
+        double C1 = Math.sqrt(square(lab1.a) + square(lab1.b));
+        double C2 = Math.sqrt(square(lab2.a) + square(lab2.b));
 
         double deltaL = lab1.L - lab2.L;
         double deltaC = C1 - C2;
-        double deltaH = Math.sqrt(Math.pow(deltaA, 2) + Math.pow(deltaB, 2) - Math.pow(deltaC, 2));
+        double deltaH = Math.sqrt(square(deltaA) + square(deltaB) - square(deltaC));
 
         double Kl = 1;
         double Kc = 1;
@@ -65,11 +59,11 @@ public class sRGB {
         double Sh = 1 + K2 * C2;
 
         return Math.sqrt(
-                Math.pow(deltaL / (Kl * Sl), 2) + Math.pow(deltaC / (Kc * Sc), 2) + Math.pow(deltaH / (Kh * Sh), 2)
+                square(deltaL / (Kl * Sl)) + square(deltaC / (Kc * Sc)) + square(deltaH / (Kh * Sh))
         );
     }
 
-    private static CIELab toCIELab(Color color) {
+    public static CIELab toCIELab(Color color) {
         double red = linearize(normalize(color.getRed()));
         double green = linearize(normalize(color.getGreen()));
         double blue = linearize(normalize(color.getBlue()));
@@ -101,6 +95,13 @@ public class sRGB {
         } else {
             return Math.pow((value + 0.055) / 1.055, 2.4);
         }
+    }
+
+    /**
+     * faster than pow()
+     */
+    private static double square(double value) {
+        return value * value;
     }
 
 }

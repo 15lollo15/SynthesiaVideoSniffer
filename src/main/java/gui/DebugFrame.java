@@ -44,8 +44,8 @@ public class DebugFrame extends JFrame {
 
     public void setFrame(BufferedImage frame) {
         frameView.setIcon(new ImageIcon(frame));
-        frameView.repaint();
-        this.repaint();
+        // TODO: i think repaint should be moved out
+        repaint();
     }
 
     public void setKeyboardStatus(int index, boolean status) {

@@ -25,7 +25,7 @@ public class Mask {
         this.frameHeight = frameHeight;
 
         whiteYOffset = (int) (frameHeight - (frameHeight / 36.0));
-        blackYOffset = (int) (whiteYOffset - (frameHeight / 8.0));
+        blackYOffset = (int) (whiteYOffset - (frameHeight / 13.0));
 
         sensorWidth = DEFAULT_SENSOR_DIM;
         sensorHeight = DEFAULT_SENSOR_DIM;
