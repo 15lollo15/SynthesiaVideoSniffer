@@ -1,12 +1,13 @@
 import gui.DebugFrame;
 import image.ImageUtils;
 import mask.Mask;
+import midi.MidiMaker;
 import midi.Note;
 import sniffer.KeySensor;
 import sniffer.Keyboard;
 import video.VideoFrameGrabber;
 
-import javax.sound.midi.*;
+import javax.sound.midi.InvalidMidiDataException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -34,7 +35,7 @@ public class MainClass {
     private static final boolean SHOW_KEY_SENSORS = true;
 
 
-    public static void main(String[] args) throws IOException, MidiUnavailableException, InvalidMidiDataException {
+    public static void main(String[] args) throws IOException, InvalidMidiDataException {
 
         // Grabber start
         VideoFrameGrabber videoFrameGrabber = new VideoFrameGrabber(SYNTHESIA_VIDEO);
@@ -50,11 +51,7 @@ public class MainClass {
         // Setup Keyboard
         Keyboard keyboard = new Keyboard();
 
-        // Setup MIDI
-        Sequencer sequencer = MidiSystem.getSequencer();
-        sequencer.open();
-        Sequence sequence = new Sequence(Sequence.PPQ, 16);
-        Track track = sequence.createTrack();
+        MidiMaker midiMaker = new MidiMaker(keyboard);
 
         DebugFrame debugFrame = new DebugFrame(baseFrame);
 
@@ -62,23 +59,20 @@ public class MainClass {
         BufferedImage frame;
         while (null != (frame = videoFrameGrabber.nextFrame())) {
             for (KeySensor keySensor : keySensors) {
-                int keyIndex = keySensor.getNote().ordinal();
+                Note note = keySensor.getNote();
                 boolean isPressed = keySensor.isPressed(frame);
 
-                MidiEvent me;
                 if (isPressed) {
-                    me = keyboard.pressKey(keyIndex, numFrame);
+                    keyboard.pressKey(note, numFrame);
                 } else {
-                    me = keyboard.releaseKey(keyIndex, numFrame);
+                    keyboard.releaseKey(note, numFrame);
                 }
-
-                track.add(me);
 
                 if (SHOW_KEY_SENSORS) {
                     keySensor.drawSensor(frame);
                 }
 
-                debugFrame.setKeyboardStatus(keyIndex, isPressed);
+                debugFrame.setKeyboardStatus(note.ordinal(), isPressed);
             }
             debugFrame.setFrame(frame);
             numFrame++;
@@ -87,8 +81,9 @@ public class MainClass {
                 sleep(videoFrameGrabber.getFrameRate(), SPEED);
             }
         }
-        MidiSystem.write(sequence, MidiSystem.getMidiFileTypes()[0], MIDI_OUTPUT);
         videoFrameGrabber.close();
+
+        midiMaker.saveToMidi(MIDI_OUTPUT);
 
         System.exit(0);
     }

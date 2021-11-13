@@ -11,10 +11,6 @@ public enum Note {
     A6, B6b, B6, C7, D7b, D7, E7b, E7, F7, G7b, G7, A7b,
     A7, B7b, B7, C8;
 
-    public int getMidiCode() {
-        return this.ordinal() + 9;
-    }
-
     public static boolean isWhiteKey(int keyIndex) {
         String noteName = Note.values()[keyIndex].toString();
         return !noteName.endsWith("b");

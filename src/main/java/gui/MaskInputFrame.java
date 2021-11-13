@@ -47,7 +47,7 @@ public class MaskInputFrame extends JFrame {
     }
 
     public JButton addSensor() {
-        if (sensorsPanel.getComponentCount() < Keyboard.DEFAULT_KEYBOARD_SIZE) {
+        if (sensorsPanel.getComponentCount() < Keyboard.KEYBOARD_SIZE) {
             JButton sensor = newSensor((int) (Math.random() * sensorsPanel.getWidth()), (int) (Math.random() * sensorsPanel.getHeight()));
             sensor.setSelected(true);
             sensorsPanel.add(sensor);
