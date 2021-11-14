@@ -2,66 +2,49 @@ package sniffer;
 
 import midi.Note;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.ShortMessage;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 public class Keyboard {
-    public static final int DEFAULT_KEYBOARD_SIZE = 88;
-    public static final int DEFAULT_VELOCITY = 100;
 
-    private Note startNote;
-    private int keyboardSize;
-    private boolean[] isPressed;
+    private static final boolean PRESSED = true;
+    private static final boolean RELEASED = false;
 
-    public Keyboard() {
-        this(DEFAULT_KEYBOARD_SIZE, Note.A0);
-    }
+    public static final int KEYBOARD_SIZE = 88;
+    private final boolean[] isPressed = new boolean[KEYBOARD_SIZE];
 
-    public Keyboard(int keyboardSize, Note startNote) {
-        this.keyboardSize = keyboardSize;
-        this.startNote = startNote;
-        this.isPressed = new boolean[keyboardSize];
-    }
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
-    public MidiEvent pressKey(int keyIndex, int tick) {
-        return pressKey(keyIndex, tick, DEFAULT_VELOCITY);
-    }
+    public void pressKey(Note note, int tick) {
+        if (!isPressed[note.ordinal()]) {
+            isPressed[note.ordinal()] = true;
 
-    public MidiEvent releaseKey(int keyIndex, int tick) {
-        return releaseKey(keyIndex, tick, DEFAULT_VELOCITY);
-    }
-
-    public MidiEvent pressKey(int keyIndex, int tick, int velocity) {
-        if (!isPressed[keyIndex]) {
-            isPressed[keyIndex] = true;
-            return sendEvent(ShortMessage.NOTE_ON, keyIndex, tick, velocity);
+            pcs.firePropertyChange(
+                    "keystroke",
+                    null,
+                    new Keystroke(note, PRESSED, tick)
+            );
         }
-        return null;
     }
 
-    public MidiEvent releaseKey(int keyIndex, int tick, int velocity) {
-        if (isPressed[keyIndex]) {
-            isPressed[keyIndex] = false;
-            return sendEvent(ShortMessage.NOTE_OFF, keyIndex, tick, velocity);
+    public void releaseKey(Note note, int tick) {
+        if (isPressed[note.ordinal()]) {
+            isPressed[note.ordinal()] = false;
+
+            pcs.firePropertyChange(
+                    "keystroke",
+                    null,
+                    new Keystroke(note, RELEASED, tick)
+            );
         }
-        return null;
     }
 
-    private MidiEvent sendEvent(int messageCode, int keyIndex, int tick) {
-        return sendEvent(messageCode, keyIndex, tick, DEFAULT_VELOCITY);
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        pcs.addPropertyChangeListener(pcl);
     }
 
-    private MidiEvent sendEvent(int messageCode, int keyIndex, int tick, int velocity) {
-        int realMidiCode = startNote.getMidiCode() + keyIndex;
-        ShortMessage message = null;
-        try {
-            message = new ShortMessage(messageCode, 1, realMidiCode, velocity);
-        } catch (InvalidMidiDataException e) {
-            e.printStackTrace();
-        }
-
-        return new MidiEvent(message, tick);
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        pcs.removePropertyChangeListener(pcl);
     }
 
 }
