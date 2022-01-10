@@ -11,22 +11,15 @@ import java.awt.image.BufferedImage;
 public class KeySensor {
 
     /**
-     * Delta E = 0:
-     * two colors are equal
+     * DeltaE = 0 : equal colors
+     * DeltaE < 3 : colors difference difficult to notice 
      *
-     * Delta E < 1:
-     * two colors are almost indistinguishable
-     *
-     * Delta 1 < E < 2:
-     * two colors are distinguishable if you watch them closely
-     *
-     * Delta 2 < E < 3:
-     * two colors are distinguishable
-     *
-     * Delta E > 3:
-     * two colors are definitely different
+     * TODO: DeltaE = 10 is high enough to say that there's a
+     *       difference between two colors big enough to differentiate
+     *       pressed notes from simple color variations but testing is
+     *       needed to calibrate this value for Synthesia videos
      */
-    private static final int DELTA_E_SENSITIVITY = 5;
+    private static final int DELTA_E_SENSITIVITY = 10;
 
     private final Note note;
     private final Rectangle sensorArea;
@@ -45,7 +38,8 @@ public class KeySensor {
     public boolean isPressed(BufferedImage img) {
         Color areaColor = ImageUtils.average(img, sensorArea);
         CIELab areaColorLab = sRGB.toCIELab(areaColor);
-        return ImageUtils.colorDifference(baseColorLab, areaColorLab) > DELTA_E_SENSITIVITY;
+        double deltaE = ImageUtils.colorDifference(baseColorLab, areaColorLab);
+        return deltaE > DELTA_E_SENSITIVITY;
     }
 
     public void drawSensor(BufferedImage img) {
