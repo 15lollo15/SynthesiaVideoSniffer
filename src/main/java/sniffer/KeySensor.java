@@ -14,11 +14,12 @@ public class KeySensor {
      * DeltaE = 0 : equal colors
      * DeltaE < 3 : colors difference difficult to notice 
      *
-     * TODO: DeltaE = 5 is high enough to say that there's a
-     *       difference between two colors but testing is needed
-     *       to calibrate this value for Synthesia videos
+     * TODO: DeltaE = 10 is high enough to say that there's a
+     *       difference between two colors big enough to differentiate
+     *       pressed notes from simple color variations but testing is
+     *       needed to calibrate this value for Synthesia videos
      */
-    private static final int DELTA_E_SENSITIVITY = 5;
+    private static final int DELTA_E_SENSITIVITY = 10;
 
     private final Note note;
     private final Rectangle sensorArea;
@@ -37,7 +38,8 @@ public class KeySensor {
     public boolean isPressed(BufferedImage img) {
         Color areaColor = ImageUtils.average(img, sensorArea);
         CIELab areaColorLab = sRGB.toCIELab(areaColor);
-        return ImageUtils.colorDifference(baseColorLab, areaColorLab) > DELTA_E_SENSITIVITY;
+        double deltaE = ImageUtils.colorDifference(baseColorLab, areaColorLab);
+        return deltaE > DELTA_E_SENSITIVITY;
     }
 
     public void drawSensor(BufferedImage img) {
