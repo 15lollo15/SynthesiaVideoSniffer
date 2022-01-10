@@ -17,24 +17,32 @@ public class ImageUtils {
         int endY = startY + rect.width;
         int totPixels = rect.height * rect.width;
 
-        int sumR = 0;
-        int sumG = 0;
-        int sumB = 0;
+        double sumR = 0;
+        double sumG = 0;
+        double sumB = 0;
 
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++) {
                 Color pixelColor = new Color(img.getRGB(x, y));
-                sumR += pixelColor.getRed();
-                sumG += pixelColor.getGreen();
-                sumB += pixelColor.getBlue();
+                sumR += linearize(pixelColor.getRed());
+                sumG += linearize(pixelColor.getGreen());
+                sumB += linearize(pixelColor.getBlue());
             }
         }
 
-        int r = sumR / totPixels;
-        int g = sumG / totPixels;
-        int b = sumB / totPixels;
+        int r = (int) delinearize(sumR / totPixels);
+        int g = (int) delinearize(sumG / totPixels);
+        int b = (int) delinearize(sumB / totPixels);
 
         return new Color(r, g, b);
+    }
+
+    public static double linearize(int channelValue) {
+        return sRGB.linearize(sRGB.normalize(channelValue));
+    }
+
+    public static double delinearize(double channelValue) {
+        return sRGB.denormalize(sRGB.delinearize(channelValue));
     }
 
     public static double colorDifference(Color c1, Color c2) {

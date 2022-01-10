@@ -63,6 +63,10 @@ public class sRGB {
         );
     }
 
+    private static double square(double value) {
+        return value * value;
+    }
+
     public static CIELab toCIELab(Color color) {
         double red = linearize(normalize(color.getRed()));
         double green = linearize(normalize(color.getGreen()));
@@ -81,12 +85,20 @@ public class sRGB {
         return new CIEXYZ(X, Y, Z);
     }
 
-    private static double normalize(int value) {
+    public static double normalize(int value) {
         return value / 255.0;
     }
 
-    private static double linearize(double value) {
+    public static double denormalize(double value) {
+        return value * 255.0;
+    }
+
+    public static double linearize(double value) {
         return inverseCompanding(value);
+    }
+
+    public static double delinearize(double value) {
+        return companding(value);
     }
 
     private static double inverseCompanding(double value) {
@@ -97,11 +109,12 @@ public class sRGB {
         }
     }
 
-    /**
-     * faster than pow()
-     */
-    private static double square(double value) {
-        return value * value;
+    private static double companding(double value) {
+        if (value <= 0.0031308) {
+            return 12.92 * value;
+        } else {
+            return 1.055 * Math.pow(value, 1.0 / 2.4) - 0.055;
+        }
     }
 
 }
