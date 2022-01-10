@@ -18,7 +18,7 @@ import java.util.List;
 public class MainClass {
 
     private static final File SYNTHESIA_VIDEO = new File(
-            "C:\\Users\\Utente\\Desktop\\test\\gny.mp4"
+            "C:\\Users\\Utente\\Desktop\\test\\knf.mp4"
     );
 
     private static final File MIDI_OUTPUT = new File(
@@ -55,6 +55,7 @@ public class MainClass {
 
         DebugFrame debugFrame = new DebugFrame(baseFrame);
 
+        int startingFrame = -1;
         int numFrame = 1;
         BufferedImage frame;
         while (null != (frame = videoFrameGrabber.nextFrame())) {
@@ -63,9 +64,11 @@ public class MainClass {
                 boolean isPressed = keySensor.isPressed(frame);
 
                 if (isPressed) {
-                    keyboard.pressKey(note, numFrame);
+                    if (startingFrame == -1)
+                        startingFrame = numFrame;
+                    keyboard.pressKey(note, numFrame - startingFrame);
                 } else {
-                    keyboard.releaseKey(note, numFrame);
+                    keyboard.releaseKey(note, numFrame - startingFrame);
                 }
 
                 if (SHOW_KEY_SENSORS) {
