@@ -107,7 +107,7 @@ public class MainClass {
         List<KeySensor> keySensors = new ArrayList<>(rects.length);
         for (int i = 0; i < rects.length; i++) {
             Color color = ImageUtils.average(baseFrame, rects[i]);
-            Note note = Note.values()[i];
+            Note note = Note.values()[mask.getStartNote().ordinal() + i];
             keySensors.add(new KeySensor(note, rects[i], color));
         }
         return keySensors;
