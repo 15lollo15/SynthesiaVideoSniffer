@@ -1,6 +1,6 @@
 package gui;
 
-import midi.Note;
+import keyboard.Note;
 
 import javax.swing.*;
 import java.awt.*;

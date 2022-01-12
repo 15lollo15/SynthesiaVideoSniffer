@@ -1,5 +1,3 @@
-package sniffer;
-
-import midi.Note;
+package keyboard;
 
 public record Keystroke(Note note, boolean pressed, int tick) {}

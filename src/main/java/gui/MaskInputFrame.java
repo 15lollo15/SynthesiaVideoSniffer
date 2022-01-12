@@ -1,6 +1,6 @@
 package gui;
 
-import sniffer.Keyboard;
+import keyboard.Keyboard;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,8 @@
 package midi;
 
-import sniffer.Keyboard;
-import sniffer.Keystroke;
+import keyboard.Keyboard;
+import keyboard.Keystroke;
+import keyboard.Note;
 
 import javax.sound.midi.*;
 import java.beans.PropertyChangeEvent;
