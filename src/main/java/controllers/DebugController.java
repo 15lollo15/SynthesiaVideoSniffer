@@ -1,7 +1,7 @@
 package controllers;
 
 import gui.DebugFrame;
-import sniffer.KeySensor;
+import keyboard.sensors.KeySensor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -1,4 +1,4 @@
-package midi;
+package keyboard;
 
 public enum Note {
 

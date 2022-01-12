@@ -1,10 +1,9 @@
 import gui.DebugFrame;
-import image.ImageUtils;
-import mask.Mask;
+import keyboard.sensors.Mask;
 import midi.MidiMaker;
-import midi.Note;
-import sniffer.KeySensor;
-import sniffer.Keyboard;
+import keyboard.Note;
+import keyboard.sensors.KeySensor;
+import keyboard.Keyboard;
 import video.VideoFrameGrabber;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -12,7 +11,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainClass {
@@ -28,12 +26,9 @@ public class MainClass {
     private static final long MILLIS_TO_SKIP = 0;
 
     // DEBUG CONSTANTS
-
     private static final boolean UNLIMITED_SPEED = true;
     private static final double SPEED = 1.0;
-
     private static final boolean SHOW_KEY_SENSORS = true;
-
 
     public static void main(String[] args) throws IOException, InvalidMidiDataException {
 
@@ -71,12 +66,13 @@ public class MainClass {
                     keyboard.releaseKey(note, numFrame - startingFrame);
                 }
 
-                if (SHOW_KEY_SENSORS) {
-                    keySensor.drawSensor(frame);
-                }
-
                 debugFrame.setKeyboardStatus(note.ordinal(), isPressed);
             }
+
+            if (SHOW_KEY_SENSORS) {
+                drawSensors(frame, keySensors);
+            }
+
             debugFrame.setFrame(frame);
             numFrame++;
 
@@ -101,16 +97,20 @@ public class MainClass {
     }
 
     public static List<KeySensor> loadSensors(BufferedImage baseFrame) {
-        Mask mask = new Mask(baseFrame.getWidth(), baseFrame.getHeight());
-        Rectangle[] rects = mask.getRectangles();
+        Mask mask = new Mask.Builder(baseFrame.getWidth(), baseFrame.getHeight())
+                .build();
 
-        List<KeySensor> keySensors = new ArrayList<>(rects.length);
-        for (int i = 0; i < rects.length; i++) {
-            Color color = ImageUtils.average(baseFrame, rects[i]);
-            Note note = Note.values()[mask.getStartNote().ordinal() + i];
-            keySensors.add(new KeySensor(note, rects[i], color));
+        return mask.createKeySensors(baseFrame);
+    }
+
+    public static void drawSensors(BufferedImage img, List<KeySensor> keySensors) {
+        Graphics2D g2d = img.createGraphics();
+        g2d.setColor(Color.RED);
+        for (KeySensor keySensor : keySensors) {
+            Rectangle sensorArea = keySensor.getSensorArea();
+            g2d.fillRect(sensorArea.x, sensorArea.y, sensorArea.width, sensorArea.height);
         }
-        return keySensors;
+        g2d.dispose();
     }
 
 }

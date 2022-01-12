@@ -1,9 +1,9 @@
-package sniffer;
+package keyboard.sensors;
 
 import colorspace.coordinates.data_types.CIELab;
 import colorspace.sRGB;
 import image.ImageUtils;
-import midi.Note;
+import keyboard.Note;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -24,6 +24,7 @@ public class KeySensor {
     private final Note note;
     private final Rectangle sensorArea;
     private final CIELab baseColorLab;
+    private int sensitivity = DELTA_E_SENSITIVITY;
 
     public KeySensor(Note note, Rectangle sensorArea, Color baseColor) {
         this.note = note;
@@ -31,22 +32,27 @@ public class KeySensor {
         this.baseColorLab = sRGB.toCIELab(baseColor);
     }
 
-    public Note getNote() {
-        return note;
-    }
-
     public boolean isPressed(BufferedImage img) {
         Color areaColor = ImageUtils.average(img, sensorArea);
         CIELab areaColorLab = sRGB.toCIELab(areaColor);
         double deltaE = ImageUtils.colorDifference(baseColorLab, areaColorLab);
-        return deltaE > DELTA_E_SENSITIVITY;
+        return deltaE > sensitivity;
     }
 
-    public void drawSensor(BufferedImage img) {
-        Graphics2D g2d = img.createGraphics();
-        g2d.setColor(Color.RED);
-        g2d.fillRect(sensorArea.x, sensorArea.y, sensorArea.width, sensorArea.height);
-        g2d.dispose();
+    public Note getNote() {
+        return note;
+    }
+
+    public Rectangle getSensorArea() {
+        return sensorArea;
+    }
+
+    public int getSensitivity() {
+        return sensitivity;
+    }
+
+    public void setSensitivity(int sensitivity) {
+        this.sensitivity = sensitivity;
     }
 
 }

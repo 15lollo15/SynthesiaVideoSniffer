@@ -1,6 +1,4 @@
-package sniffer;
-
-import midi.Note;
+package keyboard;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
