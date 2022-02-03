@@ -19,7 +19,7 @@ public class KeySensor {
      *       pressed notes from simple color variations but testing is
      *       needed to calibrate this value for Synthesia videos
      */
-    private static final int DELTA_E_SENSITIVITY = 10;
+    private static final int DELTA_E_SENSITIVITY = 11;
 
     private final Note note;
     private final Rectangle sensorArea;
