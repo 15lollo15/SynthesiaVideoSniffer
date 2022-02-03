@@ -48,7 +48,7 @@ public class sRGB {
 
         double deltaL = lab1.L - lab2.L;
         double deltaC = C1 - C2;
-        double deltaH = Math.sqrt(square(deltaA) + square(deltaB) - square(deltaC));
+        double deltaH_square = square(deltaA) + square(deltaB) - square(deltaC);
 
         double Kl = 1;
         double Kc = 1;
@@ -56,10 +56,10 @@ public class sRGB {
 
         double Sl = 1;
         double Sc = 1 + K1 * C1;
-        double Sh = 1 + K2 * C2;
+        double Sh = 1 + K2 * C1;
 
         return Math.sqrt(
-                square(deltaL / (Kl * Sl)) + square(deltaC / (Kc * Sc)) + square(deltaH / (Kh * Sh))
+                square(deltaL / (Kl * Sl)) + square(deltaC / (Kc * Sc)) + deltaH_square / square(Kh * Sh)
         );
     }
 
