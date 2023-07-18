@@ -35,21 +35,21 @@ public class CIEXYZ implements ChromaticityCoord {
         double fx, fy, fz;
 
         if (xw > CIELab.e) {
-            fx = Math.cbrt(xw);
+            fx = Math.pow(xw, 1.0 / 3.0);
         } else {
-            fx = (CIELab.k * xw + 16) / 116.0;
+            fx = (CIELab.k * xw + 16) / 116;
         }
 
         if (yw > CIELab.e) {
-            fy = Math.cbrt(yw);
+            fy = Math.pow(xw, 1.0 / 3.0);
         } else {
-            fy = (CIELab.k * yw + 16) / 116.0;
+            fy = (CIELab.k * xw + 16) / 116;
         }
 
         if (zw > CIELab.e) {
-            fz = Math.cbrt(zw);
+            fz = Math.pow(xw, 1.0 / 3.0);
         } else {
-            fz = (CIELab.k * zw + 16) / 116.0;
+            fz = (CIELab.k * xw + 16) / 116;
         }
 
         double L = 116 * fy - 16;

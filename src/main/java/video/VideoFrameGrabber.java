@@ -1,47 +1,55 @@
 package video;
 
 import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class VideoFrameGrabber extends FFmpegFrameGrabber {
+public class VideoFrameGrabber implements AutoCloseable {
 
-    private final Java2DFrameConverter frameConverter;
+    private final FFmpegFrameGrabber grabber;
+    private final Java2DFrameConverter toBufferedImageConverter;
 
-    public VideoFrameGrabber(File video) {
-        super(video);
-        frameConverter = new Java2DFrameConverter();
+    public VideoFrameGrabber(File videoFile) throws FFmpegFrameGrabber.Exception {
+        grabber = new FFmpegFrameGrabber(videoFile);
+        toBufferedImageConverter = new Java2DFrameConverter();
+        grabber.start();
     }
 
-    /**
-     * @return the next frame, null if there are no more frames
-     */
-    public BufferedImage nextFrame() throws Exception {
-        return frameConverter.convert(grabImage());
+    public int getFrameNumber() {
+        return grabber.getLengthInFrames();
     }
 
-    /**
-     * @param frames frames to skip
-     * @return number of skipped frames
-     */
-    public int skipFrames(int frames) throws Exception {
-        for (int skippedFrames = 0; skippedFrames < frames; skippedFrames++) {
-            if (grabImage() == null) {
-                return skippedFrames;
-            }
+    public double getFrameRate() {
+        return grabber.getFrameRate();
+    }
+
+    public void skipFrames(int framesNumber) {
+        for (int i = 0; i < framesNumber; i++)
+            nextFrame();
+    }
+
+    public void skipSeconds(int seconds) {
+        int framesToSkip = (int) (grabber.getFrameRate() * seconds);
+        skipFrames(framesToSkip);
+    }
+
+    public BufferedImage nextFrame() {
+        try {
+            Frame frame = grabber.grabImage();
+            if (frame != null)
+                return toBufferedImageConverter.convert(frame);
+        } catch (FFmpegFrameGrabber.Exception e) {
+            e.printStackTrace();
         }
-        return frames;
+        return null;
     }
 
-    /**
-     * @param millis number of milliseconds to skip
-     * @return the number of skipped frames
-     */
-    public int skipMillis(long millis) throws Exception {
-        int frames = (int) ((getFrameRate() * millis) / 1000.0);
-        return skipFrames(frames);
+    @Override
+    public void close() throws FFmpegFrameGrabber.Exception {
+        grabber.stop();
     }
 
 }
